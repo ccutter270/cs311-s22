@@ -1,0 +1,161 @@
+CS311: Programming Assignment #1
+Caroline Cutter + Julia Fairbank
+
+HONOR CODE: 
+We have neither given nor received unauthorized aid on this assignment.
+All group members were present and contributing during all work on this project.
+
+
+Files Required: Node.java, EightPlayer.java, NodeComparor.java
+
+
+How to Use:
+
+When this program is ran it give the user an option to choose from single(0) or multiple boards(1). Each option then allows the user to choose which algorithm to solve the 8-puzzle with - either BFS, A* with Manhattan Distance, or A* with our heuristic of counting mismatched columns and rows. When the single board is chosen, the user can input a string of a board they want solved. This will then print out either a solution with nodes generated, number of moves and other useful data OR it will not find a solution because the maximum depth of searching (13) is reached. For the multiple board option, the program will run either 100 (BFS) or 1000 (A*) iterations depending on which algorithm the user chooses to solve. Then this will print out the solutions found, a "." for all solutions that could not be found and then some data including average nodes generated and moves to solve. 
+
+
+
+Explanations for Parts of Our Program:
+
+- Our print statement takes in a successful node and then backtracks the solution and prints 	out the moves in their respective order. However, the way we tracked the number of moves is by using the nummoves global to track individual solved boards and then a global total_moves to keep track of the total moves for multiple iterations. We did this because the assignment said to keep track of num moves in the print function, but when we were using the multiple board option, we needed a way to keep track of the current solved board, as well as a way to keep track of the total moves for the average at the end. We know we would get points off for changing functions so we just set nummoves = total_moves on line 115 so that we didn't have to change the average code on line 122. This seemed to work well when we used the multiple board option and did not change the output for the single board option which is what we wanted. 
+
+- We also commented out lines 162, 171 & 173 because they were printing out the numbers of the boar and the output was more like the sample output when we comment these out. This was mostly for ease of reading the output
+
+- We have a "NodeComparor.java" file which contains the function used as our comparer in the Priority Queue for the A* search. What this does is set the priority queue based off of the f(n) value. 
+
+
+
+
+
+
+Known Bugs: NA
+
++------------------+-------------+------------------------------------------+
+|CASE              | # OF MOVES  |            # OF NODES GENERATED          |
++------------------+-------------+-------------+--------------+-------------+
+|                  |             | BFS         |A* (Manhattan)|  A*(Ours)   |
++------------------+-------------+-------------+--------------+-------------+
+|1                 |   12        |   2329      |    26        |    43       |
++------------------+-------------+-------------+--------------+-------------+
+|2                 |    2        |     13      |     5        |     5       |
++------------------+-------------+-------------+--------------+-------------+
+|3                 |    3        |     26      |     9        |     9       |
++------------------+-------------+-------------+--------------+-------------+
+|4                 |    5        |     76      |    10        |    10       |
++------------------+-------------+-------------+--------------+-------------+
+|5                 |    8        |    292      |    16        |    16       |
++------------------+-------------+-------------+--------------+-------------+
+|6                 |   10        |   1060      |    19        |    24       |
++------------------+-------------+-------------+--------------+-------------+
+|7                 |   N/A       |    N/A      |     N/A      |     N/A     |
++------------------+-------------+-------------+--------------+-------------+
+|   AVG for all    |   N/A       |   315919    |    11980     |    55696    |
+|   iterations	  |             |             |              |             |
+|  (Random Boards) |             |             |              |             |
++------------------+-------------+-------------+--------------+-------------+
+
+****************************************************************************
+
+Example Outputs for Multiple Random Boards:
+
+(note: only including the data at the end like the sample solutions from the email, not the printed out solutions)
+
+
+BFS: 
+
+EXAMPLE RUN 1:
+
+Number of nodes generated to solve: 165912
+Number of moves to solve: 7
+Number of solutions so far: 1
+_______
+...............................................
+Number of iterations: 100
+Average number of moves for 1 solutions: 7
+Average number of nodes generated for 1 solutions: 315930
+
+
+EXAMPLE RUN 2:
+
+....................................................................................................
+Number of iterations: 100
+No solutions in 100iterations.
+
+
+
+
+A* With Manhattan:
+
+
+EXAMPLE RUN 1: 
+
+Number of nodes generated to solve: 103514
+Number of moves to solve: 8
+Number of solutions so far: 5
+_______
+.............................................................................................................................................................................................................................................................................
+
+Number of iterations: 1000
+Average number of moves for 5 solutions: 11
+Average number of nodes generated for 5 solutions: 28765
+
+
+EXAMPLE RUN 2: 
+
+Number of nodes generated to solve: 129918
+Number of moves to solve: 13
+Number of solutions so far: 7
+_______
+.................................................................
+Number of iterations: 1000
+Average number of moves for 7 solutions: 11
+Average number of nodes generated for 7 solutions: 19807
+
+
+
+A* With Our Own Heuristic:
+
+
+EXAMPLE RUN 1: 
+
+Number of nodes generated to solve: 275812
+Number of moves to solve: 13
+Number of solutions so far: 11
+_______
+....
+Number of iterations: 1000
+Average number of moves for 11 solutions: 11
+Average number of nodes generated for 11 solutions: 25170
+
+
+EXAMPLE RUN 2: 
+
+Number of nodes generated to solve: 275122
+Number of moves to solve: 10
+Number of solutions so far: 5
+_______
+.........
+Number of iterations: 1000
+Average number of moves for 5 solutions: 12
+Average number of nodes generated for 5 solutions: 55511
+
+***********************************************************************************************
+
+
+
+Personal A* Heuristic Function: To solve the 8-Puzzle Problem, we decided to
+look at the number of tiles that are out of their row plus the number
+of tiles that are out of their column. We know that this is an admissable
+function because for every tile that is either out of it's row or column, it
+must be moved at least once. For every tile that is out of their row AND
+out of their column, it must be moved at least twice. Therefore, this function
+will never overestimate the cost. As an example, we will use a board where each
+tile is in the wrong position.
+
+EXAMPLE:    GOAL:
+4 1 8       1 2 3
+2 7 3       4 5 6
+6 5         7 8
+
+Here, there are 7 tiles out of their row, and 5 tiles out of their column. So,
+this heuristic function says the cost is (7+5) = 12.
